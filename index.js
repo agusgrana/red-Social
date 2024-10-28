@@ -8,7 +8,9 @@ import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
 import multer from "multer";
-// import { register } from "./controllers/auth.js";
+import authRoutes from "./routes/auth.js";
+import userRoutes from "./routes/users.js";
+import { register } from "./controllers/auth.js";
 
 
 // CONFIGURATIONS
@@ -39,7 +41,11 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // ROUTES WITH FILES
-// app.post("/auth/register", upload.single("picture"), register);
+app.post("/auth/register", upload.single("picture"), register);
+
+// ROUTES
+app.use("/auth", authRoutes);
+app.use("/users", userRoutes);
 
 // MONGOOSE SETUP
 const PORT = process.env.PORT || 6001;
@@ -47,17 +53,3 @@ mongoose.connect(process.env.MONGO_URL).then(() => {
     app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
 }).catch((error) => console.log(`${error} did not connect`));
 
-// mongoose.connect(process.env.MONGO_URL).then(() => {
-//     console.log('Connected to MongoDB')
-// }).catch((err) => {
-//     console.log(err)
-// })
-
-// mongoose.set('debug', true);
-
-// const app = express()
-// app.use(express.json());
-
-// app.listen(3000, () => {
-//     console.log('Server is running on port 3000')
-// })
